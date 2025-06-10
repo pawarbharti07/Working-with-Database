@@ -608,6 +608,7 @@ end //
 Delimiter ;
 call max_salary();*/
 /*19.Create a stored procedure PromoteEmployee that increases an employee’s salaryand changes their job role.*/
+select * from employess;
 
 /* 20.Create a stored procedure AssignManagerToDepartment that assigns a newmanager to all employees in a specific department.
 Delimiter //
