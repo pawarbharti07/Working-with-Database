@@ -139,8 +139,8 @@ WHERE e.department_id = d.department_id
 	AND l.country_id = c.country_id
 	AND c.region_id = r.region_id
 	AND j.job_id = e.job_id;
-
 */
+
 /*==========================INSERT TABLES======================*/
 /*insert into salesman values(5001,'James Hoog','New York',0.15);
 insert into salesman values(5002,'Nail Knite','Paris',0.13);
@@ -235,7 +235,7 @@ INSERT INTO locations VALUES (1200,'2017 Shinjuku-ku','1689','Tokyo','Tokyo Pref
 INSERT INTO locations VALUES (1300,'9450 Kamiya-cho','6823','Hiroshima',NULL,'JP');
 INSERT INTO locations VALUES (1400,'2014 Jabberwocky Rd','26192','Southlake','Texas','US');
 INSERT INTO locations VALUES (1500,'2011 Interiors Blvd','99236','South San Francisco','California','US');
-INSERT INTO locations VALUES (1600,‘2007 Zagora St','50090','South Brunswick','New Jersey','US');
+INSERT INTO locations VALUES (1600,'2007 Zagora St','50090','South Brunswick','New Jersey','US');
 INSERT INTO locations VALUES (1700,'2004 Charade Rd','98199','Seattle','Washington','US');
 INSERT INTO locations VALUES (1800,'147 Spadina Ave','M5V 2L7','Toronto','Ontario','CA');
 INSERT INTO locations VALUES (1900,'6092 Boxwood St','YSW 9T2','Whitehorse','Yukon','CA');
@@ -424,7 +424,7 @@ INSERT INTO job_history VALUES (102,STR_TO_DATE('13-Jan-1993', '%d-%M-%Y'),STR_T
 INSERT INTO job_history VALUES (101,STR_TO_DATE('21-Sep-1989', '%d-%M-%Y'),STR_TO_DATE('27-Oct-1993', '%d-%M-%Y'),'AC_ACCOUNT',110);
 INSERT INTO job_history VALUES (101,STR_TO_DATE('28-Oct-1993','%d-%M-%Y'),STR_TO_DATE('15-Mar-1997','%d-%M-%Y'),'AC_MGR',110);
 INSERT INTO job_history VALUES (201,STR_TO_DATE('27-Feb-1996','%d-%M-%Y'),STR_TO_DATE('19-Dec-1999','%d-%M-%Y'),'MK_REP',20);
-INSERT INTO job_history VALUES (114,STR_TO_DATE('24-Mar-1998','%d-%M-%Y'),STR_TO_DATE('31-Dec-1999','%d-%M-%Y'),ST_CLERK',50);
+INSERT INTO job_history VALUES (114,STR_TO_DATE('24-Mar-1998','%d-%M-%Y'),STR_TO_DATE('31-Dec-1999','%d-%M-%Y'),'ST_CLERK',50);
 INSERT INTO job_history VALUES (122,STR_TO_DATE('01-Jan-1999','%d-%M-%Y'),STR_TO_DATE('31-Dec-1999','%d-%M-%Y'),'ST_CLERK',50);
 INSERT INTO job_history VALUES (200,STR_TO_DATE('17-Sep-1987','%d-%M-%Y'),STR_TO_DATE('17-Jun-1993','%d-%M-%Y'),'AD_ASST',90);
 INSERT INTO job_history VALUES (176,STR_TO_DATE('24-Mar-1998','%d-%M-%Y'),STR_TO_DATE('31-Dec-1998','%d-%M-%Y'),'SA_REP',80);
@@ -460,8 +460,15 @@ from customer
 where city = 'New York' and grade > 100;
 */
 /*3.Write a SQL query that displays order number, purchase amount, and the achieved and unachieved percentage (%) for those orders that exceed 50%of thetarget value of 6000.
+select 
+	ord_no,
+    purch_amt,
+    (purch_amt/6000) * 100 AS achieved,
+    ((purch_amt/6000) * 100)-100 AS unachieved
+from orders
+where purch_amt >= 3000;
+*/    
 
-*/
 /*4.write a SQL query to calculate the total purchase amount of all orders. Return total purchase amount. 
 select 
 	sum(purch_amt) AS Total_Amount
@@ -608,8 +615,36 @@ end //
 Delimiter ;
 call max_salary();*/
 /*19.Create a stored procedure PromoteEmployee that increases an employee’s salaryand changes their job role.*/
-select * from employess;
+/*Drop procedure PromoteEmployee;
+DELIMITER $$
+CREATE PROCEDURE PromoteEmployee (
+    IN empId INT,
+    IN newSalary DECIMAL(10, 2),
+    IN newJobId VARCHAR(10)
+)
+BEGIN
+    -- Optional: Check if newSalary is within the new job's salary range
+    DECLARE minSal DECIMAL(10, 2);
+    DECLARE maxSal DECIMAL(10, 2);
+    
+    SELECT min_salary, max_salary 
+    INTO minSal, maxSal 
+    FROM jobs 
+    WHERE job_id = newJobId;
 
+    IF newSalary < minSal OR newSalary > maxSal THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'New salary is not within the range for the new job role.';
+    ELSE
+        UPDATE employees
+        SET salary = newSalary,
+            job_id = newJobId
+        WHERE employee_id = empId;
+    END IF;
+END $$
+DELIMITER ;
+CALL PromoteEmployee(100, 16000, 'AC_MGR');
+select * from employees;*/
 /* 20.Create a stored procedure AssignManagerToDepartment that assigns a newmanager to all employees in a specific department.
 Delimiter //
 create procedure AssignManagerToDepartment(IN x INT,IN y INT)
